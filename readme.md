@@ -18,7 +18,6 @@
 ## 4. `login.php`
 
 - **Deskripsi**: Halaman masuk pengguna.
-- **Desain Kasar**: Formulir masuk dengan input untuk email dan kata sandi, serta tombol masuk.
 - **Status**: Isi file nya hanya design front-end saja
 
 ## 5. `register.php`
