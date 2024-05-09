@@ -27,7 +27,7 @@
 - **Status**: Isi file nya hanya design front-end saja
 
 ## untuk semua file yang saya sebutkan di atas isinya masih berupa design front-end nya saja,
-dan itu pun belum benar benar beres, untuk kedepannya masih banyak yang harus di perbaiki.
+## dan itu pun belum benar benar beres, untuk kedepannya masih banyak yang harus di perbaiki.
 
 ## untuk SQL masih bingung cara upload ke github nya 
 
