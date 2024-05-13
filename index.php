@@ -22,7 +22,7 @@
     }
 
     .navbar-brand:hover {
-      color: #3a4852;
+      color: #3a4852 ;
     }
 
     .card {
