@@ -1,0 +1,23 @@
+body {
+  color: #52616B;
+  background-color: #fbf3b1;
+}
+
+.navbar-brand {
+  color: #52616B;
+  transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #3a4852;
+}
+
+.card {
+  background-color: #f3f3f2;
+  border: none;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* * {
+    border: 1px solid red;
+  } */

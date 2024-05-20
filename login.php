@@ -1,3 +1,8 @@
+<?php 
+// include "koneksi.php";
+// $conn = open_connection();
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -16,7 +21,7 @@
             /* padding-top: 4rem;
             padding-bottom: 4rem; */
             padding: 5rem 0 5rem 0;
-            
+
         }
 
         .navbar-brand {
@@ -57,20 +62,21 @@
         <div class="p-5 text-center">
 
             <div class="form-signin w-100 m-auto">
-                <form>
+                <form action="login-controller.php" method="POST">
                     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                     <div class="form-floating">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Email address</label>
+                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="username" required>
+                        <label for="floatingInput">Username</label>
                     </div>
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
                         <label for="floatingPassword">Password</label>
                     </div>
 
                     <button class="btn btn-primary w-100 py-2 mt-2" type="submit">Sign in</button>
                 </form>
+                <small class="d-block mt-3">Not registered? <a href="register.php">Register Now!</a></small>
             </div>
 
         </div>

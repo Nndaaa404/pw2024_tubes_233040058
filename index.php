@@ -1,3 +1,17 @@
+<?php
+require 'i-controller.php';
+
+// Query untuk mengambil semua post dan mengurutkannya berdasarkan tanggal dibuat secara menurun
+$post = query("SELECT posts.*, categories.name_category, users.name_user 
+              FROM posts 
+              JOIN categories ON posts.id_category = categories.id_category 
+              JOIN users ON posts.id_user = users.id_user 
+              ORDER BY created_at DESC");
+
+// Mengambil post pertama lalu di masukkan ke dalam variable $first_post
+$first_post = array_shift($post);
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -10,62 +24,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <!-- <style>
-    body {
-      color: #52616B;
-      background-color: #F0F5F9;
+  <style>
+    .img-container {
+      width: 1200px;
+      height: 400px;
+      overflow: hidden;
     }
 
-    .navbar-brand {
-      color: #52616B;
-      transition: color 0.3s ease;
+    .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-
-    .navbar-brand:hover {
-      color: #3a4852 ;
-    }
-
-    .card {
-      background-color: #C9D6DF;
-    }
-  </style> -->
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg p-3" style="background-color: #C9D6DF;">
-    <div class="container-fluid mx-lg-5 mx-md-3 mx-sm-3">
-      <a class="navbar-brand" style="font-family: Poppins , sans-serif; font-weight: 900; margin-right:50px;" href="#">Resep Kita</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-4 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://localhost:8080/Tugas-Besar-PW/home.php">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form class="d-flex ">
-          <button type="button" class="btn btn-outline-light">Sign in</button>
-        </form>
-      </div>
-    </div>
-  </nav>
+  <?php
+  include 'navbar.php';
+  ?>
 
   <div class="container mt-4">
     <h1 class="mb-3 text-center">Selamat datang di website Resep Kita</h1>
@@ -79,153 +56,56 @@
       </div>
     </div>
 
+    <!-- Card Post Pertama -->
     <div class="card mb-3">
-      <img src="https://source.unsplash.com/1200x400?food" class="card-img-top" alt="{{ $posts[0]->category->name }}">
-
+      <div class="img-container">
+        <?php if (!empty($first_post['image'])) : ?>
+          <img src="assets/img/<?= $first_post['image'] ?>" class="card-img-top" alt="#">
+        <?php else : ?>
+          <img src="https://source.unsplash.com/1200x400?food" class="card-img-top" alt="#">
+        <?php endif; ?>
+      </div>
       <div class="card-body text-center">
-        <h3 class="card-title"><a href="/posts/{{ $posts[0]->slug }}" class="text-decoration-none text-dark">INI JUDUL YA!!</a></h3>
+        <h3 class="card-title"><a href="#" class="text-decoration-none text-dark"><?= $first_post['title'] ?></a></h3>
         <p>
           <small class="text-muted">
-            By: <a href="/posts?author={{ $posts[0]->author->username }}" class="text-decoration-none">Ananda Rizky Maulana</a> in <a href="/posts?category={{ $posts[0]->category->slug }}" class="text-decoration-none">Resep</a>
+            By: <a href="#" class="text-decoration-none"><?= $first_post['name_user'] ?></a>
             2 minutes ago
           </small>
         </p>
-        <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-
-        <a href="/posts/{{ $posts[0]->slug }}" class="text-decoration-none btn btn-primary">Read more</a>
-
+        <p class="card-text"><?= $first_post['excerpt'] ?></p>
+        <a href="#" class="text-decoration-none btn btn-primary">Read more</a>
       </div>
     </div>
 
+    <!-- Card Post kedua -->
     <div class="container">
       <div class="row">
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
+        <?php foreach ($post as $pst) : ?>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
+                <a href="#" class="text-white text-decoration-none"><?= $pst['name_category'] ?></a>
+              </div>
+              <?php if (!empty($pst['image'])) : ?>
+                <img src="assets/img/<?= $pst['image'] ?>" class="card-img-top" alt="#">
+              <?php else : ?>
+                <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="#">
+              <?php endif; ?>
+              <div class="card-body">
+                <h5 class="card-title"><?= $pst['title'] ?></h5>
+                <p>
+                  <small class="text-muted">
+                    By: <a href="#" class="text-decoration-none"><?= $pst['name_user'] ?></a>
+                    2 minutes ago
+                  </small>
+                </p>
+                <p class="card-text"><?= $pst['excerpt'] ?></p>
+                <a href="#" class="text-decoration-none btn btn-primary">Read more</a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <div class="position-absolute px-3 py-2 rounded-1" style="background-color: rgba(0, 0, 0, 0.7)">
-              <a href="/posts?category={{ $post->category->slug }}" class="text-white text-decoration-none">Resep Kita</a>
-            </div>
-            <img src="https://source.unsplash.com/500x400?food" class="card-img-top" alt="{{ $post->category->name }}">
-
-            <div class="card-body">
-              <h5 class="card-title">Adit Masak Mie</h5>
-              <p>
-                <small class="text-muted">
-                  By: <a href="/posts?author{{ $post->author->username }}" class="text-decoration-none">Nndaaa</a>
-                  2 minutes ago
-                </small>
-              </p>
-              <p class="card-text">A aperiam ut ut fugiat laudantium. Sunt sed quia vero. Necessitatibus odio deserunt necessitatibus. Architecto facere laudantium consequuntur illo reprehenderit voluptatem non.</p>
-              <a href="/posts/{{ $post->slug }}" class="btn btn-primary">Read more</a>
-            </div>
-          </div>
-        </div>
-
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
