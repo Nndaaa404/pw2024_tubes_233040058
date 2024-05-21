@@ -10,6 +10,9 @@ $post = query("SELECT posts.*, categories.name_category, users.name_user
 
 // Mengambil post pertama lalu di masukkan ke dalam variable $first_post
 $first_post = array_shift($post);
+
+
+
 ?>
 
 <!doctype html>
@@ -26,7 +29,6 @@ $first_post = array_shift($post);
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
     .img-container {
-      width: 1200px;
       height: 400px;
       overflow: hidden;
     }
@@ -74,8 +76,8 @@ $first_post = array_shift($post);
           </small>
         </p>
         <p class="card-text"><?= $first_post['excerpt'] ?></p>
-        <a href="#" class="text-decoration-none btn btn-primary">Read more</a>
-      </div>
+        <a href='i-post-show.php?id_post=<?= $first_post['id_post']; ?>' class="text-decoration-none btn btn-primary">Read more</a>
+        </div>
     </div>
 
     <!-- Card Post kedua -->
@@ -101,8 +103,7 @@ $first_post = array_shift($post);
                   </small>
                 </p>
                 <p class="card-text"><?= $pst['excerpt'] ?></p>
-                <a href="#" class="text-decoration-none btn btn-primary">Read more</a>
-              </div>
+                <a href='i-post-show.php?id_post=<?= $pst['id_post']; ?>' class="text-decoration-none btn btn-primary">Read more</a>              </div>
             </div>
           </div>
         <?php endforeach; ?>

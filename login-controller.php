@@ -18,7 +18,7 @@ if(mysqli_num_rows($query) > 0) {
     if (password_verify($password, $row['password'])) {
         session_start();
         $_SESSION['user_id'] = $row['id_user'];
-        $_SESSION['username'] = $row['username'];
+        $_SESSION['name_user'] = $row['name_user'];
         $_SESSION['role'] = $row['role'];
         
         // Arahkan ke dashboard

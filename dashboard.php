@@ -193,7 +193,7 @@ $user_role = $_SESSION['role'];
                 <h2>Welcome Admin!</h2>
                 <p>Ini adalah dashboard admin.</p>
                 <?php else: ?>
-                <h2>Welcome User!</h2>
+                <h2>Welcome <?= $_SESSION['name_user'] ?>!</h2>
                 <p>Ini adalah dashboard user.</p>
                 <?php endif; ?>
             </main>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require 'koneksi.php';
 
 $conn = open_connection();
@@ -6,55 +6,51 @@ $conn = open_connection();
 // Mulai sesi
 session_start();
 
-function upload() {
-   
+function upload()
+{
     $namaFile = $_FILES['image']['name'];
     $ukuranFile = $_FILES['image']['size'];
     $error = $_FILES['image']['error'];
     $tmpName = $_FILES['image']['tmp_name'];
 
     // cek apakah tidak ada gambar yang di upload
-    if ( $error ===4 ) {
+    if ($error === 4) {
         echo "<script>
-                alert('pilih gambar terlebih dahulu!')
+                alert('Pilih gambar terlebih dahulu!')
               </script>";
-                return false;
+        return false;
     }
 
     // cek apakah yang diupload adalah gambar
     $ekstensiGambarValid = ['jpg', 'jpeg', 'png'];
     $ekstensiGambar = explode('.', $namaFile);
     $ekstensiGambar = strtolower(end($ekstensiGambar));
-    if( !in_array($ekstensiGambar, $ekstensiGambarValid) ) {
+    if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
         echo "<script>
-                alert('yang anda upload bukan gambar!')
+                alert('Yang anda upload bukan gambar!')
               </script>";
-                return false;
+        return false;
     }
 
     // cek jika ukurannya terlalu besar
     if ($ukuranFile > 1000000) {
         echo "<script>
-                alert('ukuran gambar terlalu besar!')
+                alert('Ukuran gambar terlalu besar!')
               </script>";
-                return false;
+        return false;
     }
 
     // lolos pengecekan gambar, gambar siap diupload
     // generate nama gambar baru
-    $namafileBaru = uniqid();
-    $namafileBaru .= '.';
-    $namafileBaru .= $ekstensiGambar;
-    // var_dump($namafileBaru);die();
+    $namaFileBaru = uniqid();
+    $namaFileBaru .= '.';
+    $namaFileBaru .= $ekstensiGambar;
+    // var_dump($namaFileBaru);die();
 
+    move_uploaded_file($tmpName, 'assets/img/' . $namaFileBaru);
 
-
-    move_uploaded_file($tmpName, 'assets/img/' . $namafileBaru);
-
-    return $namafileBaru;
-
+    return $namaFileBaru;
 }
-
 
 // Menangkap request user
 $action = isset($_POST['action']) ? $_POST['action'] : null;
@@ -71,29 +67,24 @@ if ($action == 'login') {
         exit;
     }
 
-    // var_dump($_POST);
-    // var_dump($_FILES);
-    // die();
-
     // Ambil data yang diperlukan dari form
     $title = $_POST['title'];
     $id_category = $_POST['category'];
-    $excerpt = $_POST['excerpt'];
     $body = $_POST['body'];
-    
-    // upload gambar
 
+    // Ambil excerpt dari body sebesar 200 karakter
+    $excerpt = strip_tags($body, '<p>');
+    $excerpt = substr($excerpt, 0, 200);
+
+    // upload gambar
     $image = upload();
-    if ( !$image ) {
+    if (!$image) {
         return false;
     }
-
 
     // Query untuk menambahkan posting baru
     $sql = "INSERT INTO posts (id_category, id_user, title, excerpt, body, image)
             VALUES ('$id_category', '{$_SESSION['user_id']}', '$title', '$excerpt', '$body', '$image')";
-
-    
 
     // Jalankan query
     if ($conn->query($sql) === TRUE) {
@@ -144,6 +135,75 @@ if ($action == 'login') {
         // Jika gagal menghapus maka tampilkan error
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+} else if ($action == 'view_post') {
+    // Menampilkan detail postingan
+
+    // Periksa apakah pengguna masuk
+    if (!isset($_SESSION['user_id'])) {
+        // Redirect jika pengguna belum masuk
+        header("Location: login.php");
+        exit;
+    }
+
+    // Ambil id_post yang akan ditampilkan
+    $id_post = isset($_POST['id_post']) ? $_POST['id_post'] : null;
+
+    // Simpan id_post dalam variabel sesi
+    $_SESSION['post_id'] = $id_post;
+
+    // Redirect ke halaman post_show.php untuk menampilkan detail postingan
+    header("Location: post_show.php");
+    exit;
+} else if ($action == 'edit_post') {
+    // Mengedit postingan yang ada
+
+    // Periksa apakah pengguna masuk
+    if (!isset($_SESSION['user_id'])) {
+        // Redirect jika pengguna belum masuk
+        header("Location: login.php");
+        exit;
+    }
+
+    // Ambil data yang diperlukan dari form
+    $id_post = $_POST['id_post'];
+    $title = $_POST['title'];
+    $id_category = $_POST['category'];
+    $body = $_POST['body'];
+    $old_image = $_POST['old_image'];
+
+    // Ambil excerpt dari body sebesar 200 karakter
+    $excerpt = strip_tags($body, '<p>');
+    $excerpt = substr($excerpt, 0, 200);
+
+
+    // Cek apakah ada gambar baru yang diupload
+    if ($_FILES['image']['error'] === 4) {
+        $image = $old_image;
+    } else {
+        $image = upload();
+        if (!$image) {
+            return false;
+        }
+        // Hapus gambar lama jika ada gambar baru yang diupload
+        $old_image_path = 'assets/img/' . $old_image;
+        if (file_exists($old_image_path)) {
+            unlink($old_image_path);
+        }
+    }
+
+    // Query untuk mengupdate posting
+    $sql = "UPDATE posts SET id_category = '$id_category', title = '$title', excerpt = '$excerpt', body = '$body', image = '$image' 
+            WHERE id_post = '$id_post'";
+
+    // Jalankan query
+    if ($conn->query($sql) === TRUE) {
+        // Jika berhasil mengupdate post maka redirect ke halaman posts.php
+        header("Location: posts.php");
+        exit;
+    } else {
+        // jika tidak maka tampilkan erorr
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
 
 // Query untuk mendapatkan data posting dari database
@@ -181,5 +241,3 @@ if ($result->num_rows > 0) {
 
 // Tutup koneksi
 $conn->close();
-
-?>

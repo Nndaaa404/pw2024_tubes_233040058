@@ -44,8 +44,8 @@ require_once "posts-controller.php";
                         <td><?= $post['name_category']; ?></td>
                         <td><?= $post['name_user']; ?></td>
                         <td>
-                            <a href="#" class="badge text-bg-warning text-decoration-none">Lihat</a>
-                            <a href="#" class="badge text-bg-danger text-decoration-none">Edit</a>
+                            <a href="post-show.php?id_post=<?= $post['id_post']; ?>" class="badge text-bg-warning text-decoration-none">Lihat</a>
+                            <a href="post-edit.php?id_post=<?= $post['id_post']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                             <form action="posts-controller.php" method="post" style="display:inline;" onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="action" value="delete_post">
                                 <input type="hidden" name="id_post" value="<?= $post['id_post']; ?>">
