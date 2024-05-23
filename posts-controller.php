@@ -1,4 +1,4 @@
-<?php
+<?php 
 require 'koneksi.php';
 
 $conn = open_connection();
@@ -55,9 +55,7 @@ function upload()
 // Menangkap request user
 $action = isset($_POST['action']) ? $_POST['action'] : null;
 
-if ($action == 'login') {
-    // Masuk ke dalam akun
-} else if ($action == 'create_post') {
+if ($action == 'create_post') {
     // Membuat postingan baru
 
     // Periksa apakah pengguna masuk
@@ -175,7 +173,6 @@ if ($action == 'login') {
     $excerpt = strip_tags($body, '<p>');
     $excerpt = substr($excerpt, 0, 200);
 
-
     // Cek apakah ada gambar baru yang diupload
     if ($_FILES['image']['error'] === 4) {
         $image = $old_image;
@@ -206,6 +203,13 @@ if ($action == 'login') {
     }
 }
 
+// Pengecekan apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+    // Redirect jika pengguna belum login
+    header("Location: login.php");
+    exit;
+}
+
 // Query untuk mendapatkan data posting dari database
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
     // Jika pengguna adalah admin, dapatkan semua postingan
@@ -224,6 +228,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
                 WHERE posts.id_user = $user_id";
     } else {
         // Tindakan jika tidak ada id pengguna yang tersedia
+        echo "Error: User ID is not available.";
+        exit;
     }
 }
 
@@ -241,3 +247,5 @@ if ($result->num_rows > 0) {
 
 // Tutup koneksi
 $conn->close();
+
+?>

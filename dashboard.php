@@ -132,12 +132,14 @@ $user_role = $_SESSION['role'];
                                     </svg>
                                     Posts
                                 </a>
-                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="#">
+                                <?php if ($user_role == 'admin'): ?>
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="categories.php">
                                     <svg class="bi">
                                         <use xlink:href="#house-fill" />
                                     </svg>
                                     Categories
                                 </a>
+                                <?php endif; ?>
                             </li>
                         </ul>
 

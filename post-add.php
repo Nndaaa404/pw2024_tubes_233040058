@@ -3,15 +3,14 @@ session_start();
 
 include 'koneksi.php'; 
 
-
 $conn = open_connection();
 
-// cek apakah user sudah login
-if (!isset($_SESSION['user_id'])) {
-    // jika belum maka redirect ke halaman login
-    header("Location: login.php");
-    exit;
-}
+// // cek apakah user sudah login
+// if (!isset($_SESSION['user_id'])) {
+//     // jika belum maka redirect ke halaman login
+//     header("Location: login.php");
+//     exit;
+// }
 ?>
 
 <!doctype html>
