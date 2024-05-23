@@ -1,27 +1,13 @@
 <?php
-require 'categories-controller.php';
+require 'profile-controller.php';
 
-$categories = query("SELECT * FROM categories");
+// $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$user_id = $_SESSION['user_id'];
 
-if (isset($_POST['hapus'])) {
-    $id = $_POST['hapus'];
-    $result = hapus($id);
-    if ($result === -1) {
-        echo "<script>
-                alert('Gagal menghapus kategori: Kategori masih digunakan oleh postingan lain');
-                document.location.href = 'categories.php';
-              </script>";
-        exit();
-    } elseif ($result > 0) {
-        echo "<script>
-                alert('Kategori berhasil dihapus');
-                document.location.href = 'categories.php';
-              </script>";
-        exit();
-    } else {
-        echo "Gagal menghapus kategori";
-    }
-}
+$users = query("SELECT * FROM users WHERE id_user = $user_id");
+// var_dump($users["role"]);
+// die();
+
 ?>
 
 <!doctype html>
@@ -42,23 +28,26 @@ if (isset($_POST['hapus'])) {
 
 <body>
     <div class="container">
-        <h1>Daftar Categories</h1>
-
-        <a href="category-add.php" class="btn btn-primary mb-3">Create new category</a>
+        <h1>Daftar Users</h1>
 
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($categories as $index => $category) : ?>
                     <tr>
-                        <th scope="row"><?= $index + 1; ?></th>
-                        <td><?= $category['name_category']; ?></td>
+                        <th scope="row">1</th>
+                        <td><?= $users['name_user']; ?></td>
+                        <td><?= $users['username']; ?></td>
+                        <td><?= $users['email']; ?></td>
+                        <td><?= $users['role']; ?></td>
                         <td>
                             <a href="category-edit.php?id_category=<?= $category['id_category']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                             <form action="" method="post" style="display:inline;" onsubmit="return confirmDelete()">
@@ -66,7 +55,6 @@ if (isset($_POST['hapus'])) {
                             </form>
                         </td>
                     </tr>
-                <?php endforeach; ?>
             </tbody>
         </table>
         <a href="dashboard.php" class="btn btn-primary mb-3">Kembali</a>

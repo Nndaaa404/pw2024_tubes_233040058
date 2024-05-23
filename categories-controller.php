@@ -6,9 +6,16 @@ include "koneksi.php";
 
 check_login();
 
-function query($sql) {
+function query($query) {
     $conn = open_connection();
-    $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    // jika hasilnya hanya satu data
+    if(mysqli_num_rows($result) == 1) {
+        return mysqli_fetch_assoc($result);
+    }
+
     $rows = [];
     while ($row = mysqli_fetch_assoc($result)) {
         $rows[] = $row;
@@ -32,6 +39,21 @@ function tambah($data) {
     $name = htmlspecialchars($data['name_category']);
 
     $query = "INSERT INTO categories VALUES (null, '$name')";
+
+    mysqli_query($conn, $query);
+
+    echo mysqli_error($conn);
+    return mysqli_affected_rows($conn);
+}
+
+function ubah($data) {
+
+    $conn = open_connection();
+
+    $id = $data['category_id'];
+    $name = htmlspecialchars($data['name_category']);
+
+    $query = "UPDATE categories SET name_category = '$name' WHERE id_category = $id";
 
     mysqli_query($conn, $query);
 

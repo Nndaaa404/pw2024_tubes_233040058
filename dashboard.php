@@ -139,7 +139,19 @@ $user_role = $_SESSION['role'];
                                     </svg>
                                     Categories
                                 </a>
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="users.php">
+                                    <svg class="bi">
+                                        <use xlink:href="#house-fill" />
+                                    </svg>
+                                    Users
+                                </a>
                                 <?php endif; ?>
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="profile.php">
+                                    <svg class="bi">
+                                        <use xlink:href="#house-fill" />
+                                    </svg>
+                                    Profile
+                                </a>
                             </li>
                         </ul>
 

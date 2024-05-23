@@ -1,27 +1,12 @@
 <?php
-require 'categories-controller.php';
+require 'users-controller.php';
 
-$categories = query("SELECT * FROM categories");
+$users = query("SELECT * FROM users");
+// var_dump($users);
+// die();
 
-if (isset($_POST['hapus'])) {
-    $id = $_POST['hapus'];
-    $result = hapus($id);
-    if ($result === -1) {
-        echo "<script>
-                alert('Gagal menghapus kategori: Kategori masih digunakan oleh postingan lain');
-                document.location.href = 'categories.php';
-              </script>";
-        exit();
-    } elseif ($result > 0) {
-        echo "<script>
-                alert('Kategori berhasil dihapus');
-                document.location.href = 'categories.php';
-              </script>";
-        exit();
-    } else {
-        echo "Gagal menghapus kategori";
-    }
-}
+// catatan untuk saya sendiri. perbaiki supaya ketika users di panggil password nya tidak usah di ikut sertakan.
+
 ?>
 
 <!doctype html>
@@ -42,23 +27,23 @@ if (isset($_POST['hapus'])) {
 
 <body>
     <div class="container">
-        <h1>Daftar Categories</h1>
-
-        <a href="category-add.php" class="btn btn-primary mb-3">Create new category</a>
+        <h1>Daftar Users</h1>
 
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($categories as $index => $category) : ?>
+                <?php foreach ($users as $index => $user) : ?>
                     <tr>
                         <th scope="row"><?= $index + 1; ?></th>
-                        <td><?= $category['name_category']; ?></td>
+                        <td><?= $user['name_user']; ?></td>
+                        <td><?= $user['role']; ?></td>
                         <td>
                             <a href="category-edit.php?id_category=<?= $category['id_category']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                             <form action="" method="post" style="display:inline;" onsubmit="return confirmDelete()">
