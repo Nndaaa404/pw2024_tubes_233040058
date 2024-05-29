@@ -51,7 +51,7 @@ $first_post = array_shift($post);
 
     <div class="row justify-content-center mb-3">
       <div class="col-md-6">
-        <form action="/posts">
+        <form action="posts">
           <input type="text" class="form-control mb-3" placeholder="Search.." name="search" value="">
           <button class="btn btn-primary d-none" type="submit">Search</button>
         </form>
