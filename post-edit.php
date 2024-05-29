@@ -1,29 +1,27 @@
 <?php
-session_start(); 
+require 'posts-controller.php';
 
-include 'koneksi.php'; 
-
-$conn = open_connection();
-
-// cek apakah user sudah login
-if (!isset($_SESSION['user_id'])) {
-    // jika belum maka redirect ke halaman login
-    header("Location: login.php");
-    exit;
+// jika tidak ada id di url
+if (!isset($_GET['id_post'])) {
+    header("location: posts.php");
 }
 
-// Ambil id_post dari parameter URL
-$id_post = isset($_GET['id_post']) ? $_GET['id_post'] : null;
+// ambil id dari url
+$id = $_GET['id_post'];
 
-// Query untuk mendapatkan data posting berdasarkan id_post
-$sql = "SELECT * FROM posts WHERE id_post = '$id_post'";
-$result = $conn->query($sql);
+// query category berdasarkan id
+$post = query("SELECT * FROM posts WHERE id_post = $id");
 
-if ($result->num_rows > 0) {
-    $post = $result->fetch_assoc();
-} else {
-    echo "Post tidak ditemukan";
-    exit;
+// cek apakah tombol ubah sudah di tekan
+if (isset($_POST['submit'])) {
+    if (ubah($_POST) > 0 ) {
+        echo "<script>
+                alert('data berhasil diubah');
+                document.location.href = 'posts.php';
+              </script>";
+    } else {
+        echo "data gagal di tambahkan";
+    }
 }
 ?>
 
@@ -47,7 +45,7 @@ if ($result->num_rows > 0) {
     <div class="container col-8">
         <h1>Edit Postingan</h1>
 
-        <form action="posts-controller.php" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="edit_post">
             <input type="hidden" name="id_post" value="<?= $post['id_post']; ?>">
             <input type="hidden" name="old_image" value="<?= $post['image']; ?>">
@@ -61,6 +59,7 @@ if ($result->num_rows > 0) {
                 <select class="form-select" id="category" name="category">
                     <?php
                     // Ambil kategori dari database
+                    $conn = open_connection();
                     $sql = "SELECT * FROM categories";
                     $result = $conn->query($sql);
 

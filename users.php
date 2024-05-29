@@ -2,10 +2,19 @@
 require 'users-controller.php';
 
 $users = query("SELECT * FROM users");
-// var_dump($users);
-// die();
 
-// catatan untuk saya sendiri. perbaiki supaya ketika users di panggil password nya tidak usah di ikut sertakan.
+if (isset($_POST['hapus'])) {
+    $id = $_POST['hapus'];
+    $result_message = hapus($id);
+    echo "<script>";
+    if (strpos($result_message, 'berhasil') !== false) {
+        echo "alert('$result_message');";
+        echo "document.location.href = 'users.php';";
+    } else {
+        echo "alert('$result_message');";
+    }
+    echo "</script>";
+}
 
 ?>
 
@@ -20,7 +29,7 @@ $users = query("SELECT * FROM users");
     <link rel="stylesheet" href="styles.css">
     <script>
         function confirmDelete() {
-            return confirm('Apakah Anda yakin ingin menghapus kategori?');
+            return confirm('Apakah Anda yakin ingin menghapus pengguna?');
         }
     </script>
 </head>
@@ -45,9 +54,9 @@ $users = query("SELECT * FROM users");
                         <td><?= $user['name_user']; ?></td>
                         <td><?= $user['role']; ?></td>
                         <td>
-                            <a href="category-edit.php?id_category=<?= $category['id_category']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
+                            <a href="user-edit.php?id_user=<?= $user['id_user']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                             <form action="" method="post" style="display:inline;" onsubmit="return confirmDelete()">
-                                <button type="submit" class="badge text-bg-danger text-decoration-none border-0" name="hapus" value="<?= $category['id_category']; ?>">Hapus</button>
+                                <button type="submit" class="badge text-bg-danger text-decoration-none border-0" name="hapus" value="<?= $user['id_user']; ?>">Hapus</button>
                             </form>
                         </td>
                     </tr>

@@ -1,5 +1,44 @@
 <?php
-require_once "posts-controller.php";
+require 'posts-controller.php';
+
+if ($_SESSION['role'] === 'admin') {
+    $sql = "
+        SELECT posts.*, categories.name_category, users.name_user 
+        FROM posts 
+        JOIN categories ON posts.id_category = categories.id_category 
+        JOIN users ON posts.id_user = users.id_user
+    ";
+    $posts = query($sql);
+} else {
+    $user_id = $_SESSION['user_id'];
+    $sql = "
+        SELECT posts.*, categories.name_category, users.name_user 
+        FROM posts 
+        JOIN categories ON posts.id_category = categories.id_category 
+        JOIN users ON posts.id_user = users.id_user
+        WHERE posts.id_user = $user_id
+    ";
+    $posts = query($sql);
+}
+
+if (isset($_POST['hapus'])) {
+    $id = $_POST['hapus'];
+    $result = hapus($id);
+    if ($result === -1) {
+        echo "<script>
+                alert('Gagal menghapus Post');
+                document.location.href = 'posts.php';
+              </script>";
+        exit();
+    } else {
+        echo "<script>
+                alert('Post berhasil dihapus');
+                document.location.href = 'posts.php';
+              </script>";
+        exit();
+    }
+}
+
 ?>
 
 <!doctype html>
@@ -12,10 +51,8 @@ require_once "posts-controller.php";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <script>
-        function confirmDelete(form) {
-            if (confirm("Apakah Anda yakin ingin menghapus postingan ini?")) {
-                form.submit();
-            }
+        function confirmDelete() {
+            return confirm('Apakah Anda yakin ingin menghapus Post?');
         }
     </script>
 </head>
@@ -46,10 +83,8 @@ require_once "posts-controller.php";
                         <td>
                             <a href="post-show.php?id_post=<?= $post['id_post']; ?>" class="badge text-bg-warning text-decoration-none">Lihat</a>
                             <a href="post-edit.php?id_post=<?= $post['id_post']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
-                            <form action="posts-controller.php" method="post" style="display:inline;" onsubmit="return confirmDelete(this);">
-                                <input type="hidden" name="action" value="delete_post">
-                                <input type="hidden" name="id_post" value="<?= $post['id_post']; ?>">
-                                <button type="button" class="badge text-bg-danger text-decoration-none border-0" onclick="confirmDelete(this.form)">Hapus</button>
+                            <form action="" method="post" style="display:inline;" onsubmit="return confirmDelete()">
+                                <button type="submit" class="badge text-bg-danger text-decoration-none border-0" name="hapus" value="<?= $post['id_post']; ?>">Hapus</button>
                             </form>
                         </td>
                     </tr>

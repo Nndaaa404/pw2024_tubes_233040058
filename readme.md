@@ -1,7 +1,7 @@
 
 ## 1. `admin`
 
-- **Password**admin123
+- **Password**: admin
 
 ## 2. `user`
 

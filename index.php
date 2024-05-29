@@ -72,12 +72,12 @@ $first_post = array_shift($post);
         <p>
           <small class="text-muted">
             By: <a href="#" class="text-decoration-none"><?= $first_post['name_user'] ?></a>
-            2 minutes ago
+            <?= time_elapsed_string($first_post['created_at']) ?>
           </small>
         </p>
         <p class="card-text"><?= $first_post['excerpt'] ?></p>
         <a href='i-post-show.php?id_post=<?= $first_post['id_post']; ?>' class="text-decoration-none btn btn-primary">Read more</a>
-        </div>
+      </div>
     </div>
 
     <!-- Card Post kedua -->
@@ -99,11 +99,12 @@ $first_post = array_shift($post);
                 <p>
                   <small class="text-muted">
                     By: <a href="#" class="text-decoration-none"><?= $pst['name_user'] ?></a>
-                    2 minutes ago
+                    <?= time_elapsed_string($pst['created_at']) ?>
                   </small>
                 </p>
                 <p class="card-text"><?= $pst['excerpt'] ?></p>
-                <a href='i-post-show.php?id_post=<?= $pst['id_post']; ?>' class="text-decoration-none btn btn-primary">Read more</a>              </div>
+                <a href='i-post-show.php?id_post=<?= $pst['id_post']; ?>' class="text-decoration-none btn btn-primary">Read more</a>
+              </div>
             </div>
           </div>
         <?php endforeach; ?>

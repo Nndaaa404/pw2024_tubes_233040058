@@ -1,16 +1,17 @@
 <?php
-session_start(); 
+require 'posts-controller.php';
 
-include 'koneksi.php'; 
+if (isset($_POST['submit'])) {
+    if (tambah($_POST) > 0 ) {
+        echo "<script>
+                alert('data berhasil ditambahkan');
+                document.location.href = 'posts.php';
+              </script>";
+    } else {
+        echo "data gagal di tambahkan";
+    }
+}
 
-$conn = open_connection();
-
-// // cek apakah user sudah login
-// if (!isset($_SESSION['user_id'])) {
-//     // jika belum maka redirect ke halaman login
-//     header("Location: login.php");
-//     exit;
-// }
 ?>
 
 <!doctype html>
@@ -35,8 +36,7 @@ $conn = open_connection();
     <div class="container col-8">
         <h1>Tambah Postingan Baru</h1>
 
-        <form action="posts-controller.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="create_post"> 
+        <form action="" method="POST" enctype="multipart/form-data">
             
             <div class="mb-3">
                 <label for="title" class="form-label">Judul</label>
@@ -47,6 +47,7 @@ $conn = open_connection();
                 <select class="form-select" id="category" name="category">
                     <?php
                     // Ambil kategori dari database
+                    $conn = open_connection();
                     $sql = "SELECT * FROM categories";
                     $result = $conn->query($sql);
 
@@ -80,7 +81,3 @@ $conn = open_connection();
 </body>
 
 </html>
-
-<?php
-$conn->close();
-?>

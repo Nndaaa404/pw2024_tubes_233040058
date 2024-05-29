@@ -49,10 +49,7 @@ $users = query("SELECT * FROM users WHERE id_user = $user_id");
                         <td><?= $users['email']; ?></td>
                         <td><?= $users['role']; ?></td>
                         <td>
-                            <a href="category-edit.php?id_category=<?= $category['id_category']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
-                            <form action="" method="post" style="display:inline;" onsubmit="return confirmDelete()">
-                                <button type="submit" class="badge text-bg-danger text-decoration-none border-0" name="hapus" value="<?= $category['id_category']; ?>">Hapus</button>
-                            </form>
+                            <a href="profile-edit.php?id_user=<?= $users['id_user']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                         </td>
                     </tr>
             </tbody>

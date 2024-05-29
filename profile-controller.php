@@ -32,4 +32,23 @@ function check_login()
     }
 }
 
+function ubah($data) {
+    $conn = open_connection();
+
+    $id = $data['user_id'];
+    $name = htmlspecialchars($data['name_user']);
+    $password = mysqli_real_escape_string($conn, $data['password']);
+
+    // Enkripsi password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    $query = "UPDATE users SET name_user = '$name', password = '$password' WHERE id_user = $id";
+
+    mysqli_query($conn, $query);
+
+    echo mysqli_error($conn);
+    return mysqli_affected_rows($conn);
+}
+
+
 ?>

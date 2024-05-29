@@ -1,10 +1,38 @@
-<?php 
-require 'koneksi.php';
+<?php
+// buatkan fungsi terkait pengurangan tanggal posts
 
-$conn = open_connection();
-
-// Mulai sesi
 session_start();
+
+include 'koneksi.php';
+
+check_login();
+
+function query($query)
+{
+    $conn = open_connection();
+
+    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    // jika hasilnya hanya satu data
+    if (mysqli_num_rows($result) == 1) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+function check_login()
+{
+    if (!isset($_SESSION['user_id'])) {
+        // Redirect jika pengguna belum masuk
+        header("Location: login.php");
+        exit;
+    }
+}
 
 function upload()
 {
@@ -52,23 +80,15 @@ function upload()
     return $namaFileBaru;
 }
 
-// Menangkap request user
-$action = isset($_POST['action']) ? $_POST['action'] : null;
+function tambah($data)
+{
 
-if ($action == 'create_post') {
-    // Membuat postingan baru
-
-    // Periksa apakah pengguna masuk
-    if (!isset($_SESSION['user_id'])) {
-        // jika pengguna tidak masuk maka redirect ke halaman login
-        header("Location: login.php");
-        exit;
-    }
+    $conn = open_connection();
 
     // Ambil data yang diperlukan dari form
-    $title = $_POST['title'];
-    $id_category = $_POST['category'];
-    $body = $_POST['body'];
+    $title = $data['title'];
+    $id_category = $data['category'];
+    $body = $data['body'];
 
     // Ambil excerpt dari body sebesar 200 karakter
     $excerpt = strip_tags($body, '<p>');
@@ -80,94 +100,25 @@ if ($action == 'create_post') {
         return false;
     }
 
-    // Query untuk menambahkan posting baru
-    $sql = "INSERT INTO posts (id_category, id_user, title, excerpt, body, image)
+    $query = "INSERT INTO posts (id_category, id_user, title, excerpt, body, image)
             VALUES ('$id_category', '{$_SESSION['user_id']}', '$title', '$excerpt', '$body', '$image')";
 
-    // Jalankan query
-    if ($conn->query($sql) === TRUE) {
-        // Jika berhasil menambah post maka redirect ke halaman posts.php
-        header("Location: posts.php");
-        exit;
-    } else {
-        // jika tidak maka tampilkan erorr
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-} else if ($action == 'delete_post') {
-    // Menghapus postingan
+    mysqli_query($conn, $query);
 
-    // Periksa apakah pengguna masuk
-    if (!isset($_SESSION['user_id'])) {
-        // Redirect jika pengguna belum masuk
-        header("Location: login.php");
-        exit;
-    }
+    echo mysqli_error($conn);
+    return mysqli_affected_rows($conn);
+}
 
-    // Ambil id_post yang akan dihapus
-    $id_post = $_POST['id_post'];
+function ubah($data) {
 
-    // Query untuk mendapatkan nama file gambar posting yang akan dihapus
-    $sql_get_image = "SELECT image FROM posts WHERE id_post = '$id_post'";
-    $result_image = $conn->query($sql_get_image);
-
-    // Jika berhasil mendapatkan nama file gambar
-    if ($result_image->num_rows > 0) {
-        $row_image = $result_image->fetch_assoc();
-        $image_path = 'assets/img/' . $row_image['image'];
-
-        // Hapus gambar dari direktori
-        if (file_exists($image_path)) {
-            unlink($image_path);
-        }
-    }
-
-    // Query untuk menghapus posting berdasarkan id_post
-    $sql = "DELETE FROM posts WHERE id_post = '$id_post'";
-
-    // Jalankan query
-    if ($conn->query($sql) === TRUE) {
-        // Jika berhasil menghapus maka redirect ke halaman posts.php
-        header("Location: posts.php");
-        exit;
-    } else {
-        // Jika gagal menghapus maka tampilkan error
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-} else if ($action == 'view_post') {
-    // Menampilkan detail postingan
-
-    // Periksa apakah pengguna masuk
-    if (!isset($_SESSION['user_id'])) {
-        // Redirect jika pengguna belum masuk
-        header("Location: login.php");
-        exit;
-    }
-
-    // Ambil id_post yang akan ditampilkan
-    $id_post = isset($_POST['id_post']) ? $_POST['id_post'] : null;
-
-    // Simpan id_post dalam variabel sesi
-    $_SESSION['post_id'] = $id_post;
-
-    // Redirect ke halaman post_show.php untuk menampilkan detail postingan
-    header("Location: post_show.php");
-    exit;
-} else if ($action == 'edit_post') {
-    // Mengedit postingan yang ada
-
-    // Periksa apakah pengguna masuk
-    if (!isset($_SESSION['user_id'])) {
-        // Redirect jika pengguna belum masuk
-        header("Location: login.php");
-        exit;
-    }
+    $conn = open_connection();
 
     // Ambil data yang diperlukan dari form
-    $id_post = $_POST['id_post'];
-    $title = $_POST['title'];
-    $id_category = $_POST['category'];
-    $body = $_POST['body'];
-    $old_image = $_POST['old_image'];
+    $id_post = $data['id_post'];
+    $title = $data['title'];
+    $id_category = $data['category'];
+    $body = $data['body'];
+    $old_image = $data['old_image'];
 
     // Ambil excerpt dari body sebesar 200 karakter
     $excerpt = strip_tags($body, '<p>');
@@ -188,64 +139,43 @@ if ($action == 'create_post') {
         }
     }
 
-    // Query untuk mengupdate posting
-    $sql = "UPDATE posts SET id_category = '$id_category', title = '$title', excerpt = '$excerpt', body = '$body', image = '$image' 
-            WHERE id_post = '$id_post'";
+    $query = "UPDATE posts SET id_category = '$id_category', title = '$title', excerpt = '$excerpt', body = '$body', image = '$image' 
+    WHERE id_post = '$id_post'";
 
-    // Jalankan query
-    if ($conn->query($sql) === TRUE) {
-        // Jika berhasil mengupdate post maka redirect ke halaman posts.php
-        header("Location: posts.php");
-        exit;
+    mysqli_query($conn, $query);
+
+    echo mysqli_error($conn);
+    return mysqli_affected_rows($conn);
+}
+
+function hapus($id) {
+
+    $conn = open_connection();
+    
+    // Query untuk mendapatkan nama file gambar posting yang akan dihapus
+    $sql_get_image = "SELECT image FROM posts WHERE id_post = '$id'";
+    $result_image = $conn->query($sql_get_image);
+
+    if ($result_image->num_rows > 0) {
+        $row_image = $result_image->fetch_assoc();
+        $image_path = 'assets/img/' . $row_image['image'];
+
+        // Hapus gambar dari direktori
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
+    }
+
+    // Jika tidak ada postingan yang terhubung dengan kategori, lanjutkan penghapusan
+    $query_delete_post = "DELETE FROM posts WHERE id_post = $id";
+    $result_delete_post = mysqli_query($conn, $query_delete_post);
+
+    if ($result_delete_post) {
+        return mysqli_affected_rows($conn);
     } else {
-        // jika tidak maka tampilkan erorr
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . mysqli_error($conn);
+        return -1;
     }
+
+    mysqli_close($conn);
 }
-
-// Pengecekan apakah pengguna sudah login
-if (!isset($_SESSION['user_id'])) {
-    // Redirect jika pengguna belum login
-    header("Location: login.php");
-    exit;
-}
-
-// Query untuk mendapatkan data posting dari database
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-    // Jika pengguna adalah admin, dapatkan semua postingan
-    $sql = "SELECT posts.*, categories.name_category, users.name_user 
-            FROM posts 
-            JOIN categories ON posts.id_category = categories.id_category 
-            JOIN users ON posts.id_user = users.id_user";
-} else {
-    // Jika pengguna bukan admin, hanya dapatkan postingan yang dibuat oleh pengguna tersebut
-    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-    if ($user_id !== null) {
-        $sql = "SELECT posts.*, categories.name_category, users.name_user 
-                FROM posts 
-                JOIN categories ON posts.id_category = categories.id_category 
-                JOIN users ON posts.id_user = users.id_user
-                WHERE posts.id_user = $user_id";
-    } else {
-        // Tindakan jika tidak ada id pengguna yang tersedia
-        echo "Error: User ID is not available.";
-        exit;
-    }
-}
-
-$result = $conn->query($sql);
-
-// Inisialisasi variabel $posts untuk menampung data posting
-$posts = [];
-
-if ($result->num_rows > 0) {
-    // Loop melalui setiap baris hasil dan simpan data posting dalam array $posts
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = $row;
-    }
-}
-
-// Tutup koneksi
-$conn->close();
-
-?>
