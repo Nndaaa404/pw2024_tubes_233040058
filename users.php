@@ -1,7 +1,7 @@
 <?php
 require 'users-controller.php';
 
-$users = query("SELECT * FROM users");
+$users = query("SELECT id_user, name_user, username, email, role FROM users");
 
 if (isset($_POST['hapus'])) {
     $id = $_POST['hapus'];
@@ -43,6 +43,8 @@ if (isset($_POST['hapus'])) {
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Role</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -52,6 +54,8 @@ if (isset($_POST['hapus'])) {
                     <tr>
                         <th scope="row"><?= $index + 1; ?></th>
                         <td><?= $user['name_user']; ?></td>
+                        <td><?= $user['username']; ?></td>
+                        <td><?= $user['email']; ?></td>
                         <td><?= $user['role']; ?></td>
                         <td>
                             <a href="user-edit.php?id_user=<?= $user['id_user']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>

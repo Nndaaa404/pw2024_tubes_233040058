@@ -4,7 +4,7 @@ require 'profile-controller.php';
 // $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $user_id = $_SESSION['user_id'];
 
-$users = query("SELECT * FROM users WHERE id_user = $user_id");
+$users = query("SELECT id_user, name_user, username, email FROM users WHERE id_user = $user_id");
 // var_dump($users["role"]);
 // die();
 
@@ -37,7 +37,6 @@ $users = query("SELECT * FROM users WHERE id_user = $user_id");
                     <th scope="col">Name</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Role</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -47,7 +46,6 @@ $users = query("SELECT * FROM users WHERE id_user = $user_id");
                         <td><?= $users['name_user']; ?></td>
                         <td><?= $users['username']; ?></td>
                         <td><?= $users['email']; ?></td>
-                        <td><?= $users['role']; ?></td>
                         <td>
                             <a href="profile-edit.php?id_user=<?= $users['id_user']; ?>" class="badge text-bg-danger text-decoration-none">Edit</a>
                         </td>

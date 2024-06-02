@@ -10,7 +10,7 @@ if (!isset($_GET['id_user'])) {
 $id = $_GET['id_user'];
 
 // query user berdasarkan id
-$user = query("SELECT * FROM users WHERE id_user = $id");
+$user = query("SELECT id_user, role FROM users WHERE id_user = $id");
 
 // cek apakah tombol ubah sudah di tekan
 if (isset($_POST['submit'])) {

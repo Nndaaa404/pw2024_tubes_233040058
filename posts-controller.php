@@ -1,5 +1,4 @@
 <?php
-// buatkan fungsi terkait pengurangan tanggal posts
 
 session_start();
 

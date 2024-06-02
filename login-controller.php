@@ -1,4 +1,5 @@
 <?php 
+
 require 'koneksi.php';
 
 $conn = open_connection();
@@ -22,14 +23,25 @@ if(mysqli_num_rows($query) > 0) {
         $_SESSION['role'] = $row['role'];
         
         // Arahkan ke dashboard
-        header("Location: dashboard.php");
+        echo "<script>
+                alert('Login berhasil');
+                document.location.href = 'dashboard.php';
+              </script>";
         exit(); 
     } else {
         // Password salah
-        header("Location: login.php?error=wrongpassword");
+        echo "<script>
+                alert('Password salah. Silakan coba lagi.');
+                document.location.href = 'login.php';
+              </script>";
+        exit();
     }
 } else {
     // Pengguna tidak ditemukan
-    header("Location: login.php?error=usernotfound");
+    echo "<script>
+            alert('Pengguna tidak ditemukan. Silakan coba lagi.');
+            document.location.href = 'login.php';
+          </script>";
+    exit();
 }
 ?>

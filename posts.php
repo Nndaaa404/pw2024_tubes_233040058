@@ -9,6 +9,7 @@ if ($_SESSION['role'] === 'admin') {
         JOIN users ON posts.id_user = users.id_user
     ";
     $posts = query($sql);
+    // var_dump($posts['password']);die();
 } else {
     $user_id = $_SESSION['user_id'];
     $sql = "

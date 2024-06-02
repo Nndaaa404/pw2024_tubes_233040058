@@ -17,6 +17,18 @@ function registrasi($data) {
         return false;
     }
 
+    // validasi panjang username
+    if (strlen($username) < 5 || strlen($username) > 20) {
+        echo "<script>alert('Username harus terdiri dari 5 hingga 20 karakter')</script>";
+        return false;
+    }
+
+    // validasi panjang password
+    if (strlen($password) < 8 || strlen($password) > 20) {
+        echo "<script>alert('Password harus terdiri dari 8 hingga 20 karakter')</script>";
+        return false;
+    }
+
     // cek email
     $result = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
     if (mysqli_fetch_assoc($result)) {

@@ -9,8 +9,7 @@ if (!isset($_GET['id_user'])) {
 // ambil id dari url
 $id = $_GET['id_user'];
 
-// query category berdasarkan id
-$profile = query("SELECT * FROM users WHERE id_user = $id");
+$profile = query("SELECT id_user, name_user FROM users WHERE id_user = $id");
 
 // cek apakah tombol ubah sudah di tekan
 if (isset($_POST['submit'])) {
@@ -30,7 +29,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Postingan</title>
+    <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
