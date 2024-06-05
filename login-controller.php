@@ -25,7 +25,7 @@ if(mysqli_num_rows($query) > 0) {
         // Arahkan ke dashboard
         echo "<script>
                 alert('Login berhasil');
-                document.location.href = 'dashboard.php';
+                document.location.href = 'home-dashboard.php';
               </script>";
         exit(); 
     } else {

@@ -4,7 +4,7 @@ session_start();
 
 if (isset($_SESSION['user_id'])) {
     // Redirect jika pengguna sudah masuk 
-    header("Location: dashboard.php");
+    header("Location: home-dashboard.php");
     exit;
 }
 

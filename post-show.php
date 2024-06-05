@@ -1,7 +1,9 @@
 <?php
 session_start();
 
-include 'koneksi.php'; 
+include 'koneksi.php';
+
+$user_role = $_SESSION['role'];
 
 $conn = open_connection();
 
@@ -42,40 +44,54 @@ $conn->close();
 
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Detail Postingan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
-<div class="container">
-    <div class="row my-3">
-        <div class="col-lg-8">
-            <h1 class="mb-3"><?= htmlspecialchars($post['title']); ?></h1>
 
-            <a href="posts.php" class="btn btn-success"><span data-feather="arrow-left"></span> Kembali ke semua postingan</a>
-            <a href="post-edit.php?id_post=<?= $id_post; ?>" class="btn btn-warning"><span data-feather="edit"></span> Edit</a>
-            <form action="posts-controller.php" method="POST" class="d-inline">
-                <input type="hidden" name="action" value="delete_post">
-                <input type="hidden" name="id_post" value="<?= $id_post; ?>">
-                <button class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus postingan ini?')" type="submit"><span data-feather="x-circle" class="align-text-bottom"></span> Hapus</button>
-            </form>
+    <?php
+    include 'dashboard/header.php';
+    include 'dashboard/sidebar.php';
+    ?>
 
-            <?php if (!empty($post['image'])): ?>
-                <div style="max-height: 350px; overflow:hidden">
-                    <img src="assets/img/<?= htmlspecialchars($post['image']); ?>" alt="<?= htmlspecialchars($post['title']); ?>" class="img-fluid mt-3">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+        <div class="container">
+            <div class="row my-3">
+                <div class="col-lg-8">
+                    <h1 class="mb-3"><?= htmlspecialchars($post['title']); ?></h1>
+
+                    <a href="posts.php" class="btn btn-success"><span data-feather="arrow-left"></span> Kembali ke semua postingan</a>
+                    <a href="post-edit.php?id_post=<?= $id_post; ?>" class="btn btn-warning"><span data-feather="edit"></span> Edit</a>
+                    <form action="posts-controller.php" method="POST" class="d-inline">
+                        <input type="hidden" name="action" value="delete_post">
+                        <input type="hidden" name="id_post" value="<?= $id_post; ?>">
+                        <button class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus postingan ini?')" type="submit"><span data-feather="x-circle" class="align-text-bottom"></span> Hapus</button>
+                    </form>
+
+                    <?php if (!empty($post['image'])) : ?>
+                        <div style="max-height: 350px; overflow:hidden">
+                            <img src="assets/img/<?= htmlspecialchars($post['image']); ?>" alt="<?= htmlspecialchars($post['title']); ?>" class="img-fluid mt-3">
+                        </div>
+                    <?php endif; ?>
+
+                    <article class="my-3 fs-5">
+                        <?= $post['body']; ?>
+                    </article>
+
                 </div>
-            <?php endif; ?>
-
-            <article class="my-3 fs-5">
-                <?= $post['body']; ?>
-            </article>
-
+            </div>
         </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
