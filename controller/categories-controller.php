@@ -23,14 +23,29 @@ function query($query) {
     return $rows;
 }
 
+// function check_login()
+// {
+//     if (!isset($_SESSION['user_id'])) {
+//         // Redirect jika pengguna belum masuk
+//         header("Location: ../login.php");
+//         exit;
+//     }
+// }
+
 function check_login()
 {
+    // Memeriksa apakah user_id telah diset
     if (!isset($_SESSION['user_id'])) {
-        // Redirect jika pengguna belum masuk
+        // Redirect jika session belum diset
         header("Location: ../login.php");
+        exit;
+    } else if ($_SESSION['admin'] !== true) {
+        // Redirect ke halaman forbidden jika bukan admin
+        header("Location: ../forbidden.php");
         exit;
     }
 }
+
 
 function tambah($data) {
 
@@ -53,21 +68,9 @@ function ubah($data) {
     $id = $data['category_id'];
     $name = htmlspecialchars($data['name_category']);
 
-    // Ambil data yang ada di database
-    $query_existing = "SELECT * FROM categories WHERE id_category = $id";
-    $result_existing = mysqli_query($conn, $query_existing);
-    $existing_data = mysqli_fetch_assoc($result_existing);
+    $query = "UPDATE categories SET name_category = '$name' WHERE id_category = $id";
 
-    // Cek apakah data yang baru sama dengan data yang ada di database
-    if ($name === $existing_data['name_category']) {
-        // Jika tidak ada perubahan, return 0
-        return 0;
-    }
-
-    // Jika ada perubahan, lakukan update
-    $query_update = "UPDATE categories SET name_category = '$name' WHERE id_category = $id";
-
-    mysqli_query($conn, $query_update);
+    mysqli_query($conn, $query);
 
     echo mysqli_error($conn);
     return mysqli_affected_rows($conn);

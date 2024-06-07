@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 
@@ -6,13 +6,14 @@ include "koneksi.php";
 
 check_login();
 
-function query($query) {
+function query($query)
+{
     $conn = open_connection();
 
     $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     // jika hasilnya hanya satu data
-    if(mysqli_num_rows($result) == 1) {
+    if (mysqli_num_rows($result) == 1) {
         return mysqli_fetch_assoc($result);
     }
 
@@ -25,14 +26,20 @@ function query($query) {
 
 function check_login()
 {
+    // Memeriksa apakah user_id telah diset
     if (!isset($_SESSION['user_id'])) {
-        // Redirect jika pengguna belum masuk
+        // Redirect jika session belum diset
         header("Location: ../login.php");
+        exit;
+    } else if ($_SESSION['admin'] !== true) {
+        // Redirect ke halaman forbidden jika bukan admin
+        header("Location: ../forbidden.php");
         exit;
     }
 }
 
-function ubah($data) {
+function ubah($data)
+{
     $conn = open_connection();
 
     $id = $data['user_id'];
@@ -58,7 +65,8 @@ function ubah($data) {
     return mysqli_affected_rows($conn);
 }
 
-function hapus($id) {
+function hapus($id)
+{
     $conn = open_connection();
 
     // Hapus semua postingan yang terkait dengan pengguna
@@ -85,6 +93,3 @@ function hapus($id) {
         return $error_message;
     }
 }
-
-
-?>

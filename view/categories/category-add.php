@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
         <div class="container col-8">
             <h1>Tambah Category</h1>
 
-            <a href="categories.php" class="btn btn-success mb-3 mt-1"><span data-feather="arrow-left"></span> Back to all my
+            <a href="categories/categories.php" class="btn btn-success mb-3 mt-1"><span data-feather="arrow-left"></span> Back to all my
                     posts</a>
 
             <form action="" method="POST">
