@@ -1,0 +1,5 @@
+@media screen and (max-width: 375px) and (min-width: 300px) {
+    html {
+        font-size: 80%;
+    }
+}

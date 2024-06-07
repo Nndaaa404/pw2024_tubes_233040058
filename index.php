@@ -1,5 +1,5 @@
 <?php
-require 'i-controller.php';
+require 'controller/i-controller.php';
 
 // Query untuk mengambil semua post dan mengurutkannya berdasarkan tanggal dibuat secara menurun
 $post = query("SELECT posts.*, categories.name_category, users.name_user 
@@ -10,7 +10,7 @@ $post = query("SELECT posts.*, categories.name_category, users.name_user
 
 // ketika tombol cari diklik
 if (isset($_POST['cari'])) {
-  $keyword = $_POST['keyword']; // Trim keyword to remove extra spaces
+  $keyword = $_POST['keyword']; 
   if (empty($keyword)) {
     $post = query("SELECT posts.*, categories.name_category, users.name_user 
               FROM posts 
@@ -22,7 +22,7 @@ if (isset($_POST['cari'])) {
   }
 }
 
-// Mengambil post pertama lalu di masukkan ke dalam variable $first_post jika ada
+// Mengambil post pertama lalu di masukkan ke dalam variable $first_post
 $first_post = array_shift($post);
 ?>
 
@@ -34,27 +34,15 @@ $first_post = array_shift($post);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Resep Kita</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="resources/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
-  <style>
-    .img-container {
-      height: 400px;
-      overflow: hidden;
-    }
-
-    .img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/index.css">
 </head>
 
 <body>
   <?php
-  include 'navbar.php';
+  include 'view/navbar.php';
   ?>
 
   <div class="container mt-4">
@@ -62,10 +50,6 @@ $first_post = array_shift($post);
 
     <div class="row justify-content-center mb-3">
       <div class="col-md-6">
-        <!-- <form action="" method="post">
-          <input type="text" class="form-control mb-3 keyword" placeholder="Search.." name="keyword" autocomplete="off">
-          <button class="btn btn-primary d-none tombol-cari" type="submit" name="cari">Search</button>
-        </form> -->
         <form action="" method="post" class="input-group mb-3">
           <input type="text" class="form-control keyword" placeholder="Search.." name="keyword" autocomplete="off">
           <button class="btn btn-primary tombol-cari" type="submit" name="cari">Search</button>

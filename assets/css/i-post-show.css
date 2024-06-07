@@ -1,0 +1,47 @@
+@media print {
+
+    @page {
+        margin: 25mm;
+    }
+
+    [slot="controls"] {
+        display: none !important;
+    }
+}
+
+.blog-meta {
+    font-size: 1.1rem;
+}
+
+.blog-meta .username {
+    color: #343a40;
+    font-weight: bold;
+}
+
+.blog-meta .category {
+    color: #6c757d;
+}
+
+h1.mb-3 {
+    font-weight: bold;
+}
+
+.mx-auto {
+    max-height: 350px;
+    max-width: 850px;
+    overflow: hidden;
+}
+
+.img-fluid.mt-3 {
+    margin-top: 1rem;
+}
+
+article.my-4.fs-5 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.btn.btn-primary.mt-3.d-print-none {
+    margin-top: 1rem;
+}

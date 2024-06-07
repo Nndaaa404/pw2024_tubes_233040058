@@ -1,5 +1,6 @@
 <?php 
-    require '../i-controller.php';
+    // require '../i-controller.php';
+    require '../controller/i-controller.php';
     // $keyword = $_GET['keyword'];
     
     $post = cari($_GET['keyword']);
