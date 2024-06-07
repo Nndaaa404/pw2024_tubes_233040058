@@ -39,12 +39,13 @@ function check_login()
         // Redirect jika session belum diset
         header("Location: ../login.php");
         exit;
-    } else if ($_SESSION['admin'] !== true) {
+    } else if ($_SESSION['role'] !== 'admin') {
         // Redirect ke halaman forbidden jika bukan admin
         header("Location: ../forbidden.php");
         exit;
     }
 }
+
 
 
 function tambah($data) {
