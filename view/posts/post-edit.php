@@ -13,6 +13,7 @@ $id = $_GET['id_post'];
 
 // query category berdasarkan id
 $post = query("SELECT * FROM posts WHERE id_post = $id");
+$post = $post[0];
 
 // cek apakah tombol ubah sudah di tekan
 if (isset($_POST['submit'])) {
