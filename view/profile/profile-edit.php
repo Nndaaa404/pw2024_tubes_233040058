@@ -13,17 +13,6 @@ $id = $_GET['id_user'];
 
 $profile = query("SELECT id_user, name_user FROM users WHERE id_user = $id");
 
-// cek apakah tombol ubah sudah di tekan
-// if (isset($_POST['submit'])) {
-//     if (ubah($_POST) > 0) {
-//         echo "<script>
-//                 alert('data berhasil diubah');
-//                 document.location.href = 'profile/profile.php';
-//               </script>";
-//     } else {
-//         echo "data gagal di tambahkan";
-//     }
-// }
 
 if (isset($_POST['submit'])) {
     $result = ubah($_POST);

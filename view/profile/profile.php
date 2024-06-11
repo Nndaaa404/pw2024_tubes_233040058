@@ -1,5 +1,6 @@
 <?php
-require '../../controller/posts-controller.php';
+require '../../controller/profile-controller.php';
+
 
 $user_role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
